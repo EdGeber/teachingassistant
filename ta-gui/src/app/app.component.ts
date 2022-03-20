@@ -11,11 +11,16 @@ import { StudentService} from './student.service';
 })
 
 export class AppComponent {
+    _studentService = new StudentService();
+
     student = new Student();
-    studentService = new StudentService();
+    get students(): Student[] {
+        return this._studentService.students;
+    }
+
 
     register(s: Student): void {
-        this.studentService.register(s);
+        this._studentService.register(s);
         this.student = new Student();
     }
 }

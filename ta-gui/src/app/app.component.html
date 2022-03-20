@@ -24,4 +24,12 @@
   </tr>
 </table>
 
+<ul>
+    <li *ngFor="let a of students">
+        <span>{{a.name}}</span>,
+        <span>{{a.ssn}}</span>,
+        <span>{{a.email}}</span>
+    </li>
+</ul>
+
 <router-outlet></router-outlet>
