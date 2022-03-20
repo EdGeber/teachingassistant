@@ -1,5 +1,9 @@
 {
     "compilerOptions": {
         "experimentalDecorators": true
+    },
+
+    "angularCompilerOptions": {
+        "strictTemplates": true
     }
 }
