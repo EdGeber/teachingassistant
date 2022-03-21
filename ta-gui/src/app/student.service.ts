@@ -9,9 +9,12 @@ export class StudentService {
     }
     public students: Student[] = [];
 
+    private _ssnIsDuplicate(ssn: string) {
+        return this.students.find((s: Student) => s.ssn == ssn) != undefined;
+    }
 
     public tryRegisterStudent(s: Student): number {
-        if(this.students.find((t: Student) => t.ssn == s.ssn))
+        if(this._ssnIsDuplicate(s.ssn))
             return StudentService.CODE.TRS.DUPLICATE_SSN;
 
         this.students.push(s);
