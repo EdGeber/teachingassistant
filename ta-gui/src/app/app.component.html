@@ -10,7 +10,6 @@
   <tr>
     <td><label>Name </label></td>
     <td><input [(ngModel)]="student.name"></td>
-    <td><button (click)="register(student)">Add</button></td>
   </tr>
 
   <tr>
@@ -21,6 +20,10 @@
   <tr>
     <td><label>Email </label></td>
     <td><input [(ngModel)]="student.email"></td>
+  </tr>
+
+  <tr>
+    <td><button (click)="registerStudent()">Add</button></td>
   </tr>
 </table>
 

@@ -11,16 +11,26 @@ import { StudentService} from './student.service';
 })
 
 export class AppComponent {
-    _studentService = new StudentService();
+    private _TRS: { [index: number]: () => void } = {
+        1: () => {
+            this.student.ssn = "";
+        }
+    }
+    private _studentService = new StudentService();
 
     student = new Student();
     get students(): Student[] {
         return this._studentService.students;
     }
 
+    private _handleRegisterStudentError(code: number) {
+        this._TRS[code]();
+    }
 
-    register(s: Student): void {
-        this._studentService.register(s);
-        this.student = new Student();
+    registerStudent(): void {
+        let code = this._studentService.tryRegisterStudent(this.student);
+        if(code == StudentService.CODE.TRS.OK)
+            this.student = new Student();
+        else this._handleRegisterStudentError(code);
     }
 }
