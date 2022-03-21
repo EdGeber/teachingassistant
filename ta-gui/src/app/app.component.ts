@@ -18,16 +18,17 @@ export class AppComponent {
     }
     private _studentService = new StudentService();
 
-    student = new Student();
+    public student = new Student();
     get students(): Student[] {
         return this._studentService.students;
     }
+
 
     private _handleRegisterStudentError(code: number) {
         this._TRS[code]();
     }
 
-    registerStudent(): void {
+    public registerStudent(): void {
         let code = this._studentService.tryRegisterStudent(this.student);
         if(code == StudentService.CODE.TRS.OK)
             this.student = new Student();
