@@ -22,7 +22,7 @@ export class AppComponent {
             },
         },
     }
-    private _studentService = new StudentService();
+    constructor(private _studentService: StudentService) {}
 
     // public properties
     public student = new Student();

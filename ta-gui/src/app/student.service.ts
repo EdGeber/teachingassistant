@@ -1,5 +1,7 @@
+import { Injectable } from '@angular/core';
 import { Student } from './student';
 
+@Injectable()
 export class StudentService {
     public static readonly CODE = {
         TRS: {
