@@ -13,6 +13,11 @@
   </tr>
 
   <tr>
+    <td><label>GitHub username </label></td>
+    <td><input [(ngModel)]="student.gitName"></td>
+  </tr>
+
+  <tr>
     <td><label>SSN </label></td>
     <td><input [(ngModel)]="student.ssn"></td>
   </tr>
@@ -30,6 +35,7 @@
 <ul class="students">
     <li *ngFor="let a of students">
         <span>{{a.name}}</span>,
+        <span>{{a.gitName}}</span>,
         <span>{{a.ssn}}</span>,
         <span>{{a.email}}</span>
     </li>
