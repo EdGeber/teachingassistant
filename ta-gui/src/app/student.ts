@@ -1,5 +1,5 @@
 export class Student {
-    name  = "";
-    ssn   = "";
-    email = "";
+    name  = "nome";
+    ssn   = "ssn";
+    email = "email";
 }

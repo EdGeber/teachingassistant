@@ -12,6 +12,8 @@ import { StudentService} from './student.service';
 })
 
 export class AppComponent {
+    title = "ta-gui";
+    
     // private properties
     private readonly _ERROR_HANDLING: Record<ErrorSource, ErrorHandlers> = {
         TRS: {  // see StudentService.CODE.TRS
