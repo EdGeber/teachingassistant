@@ -35,10 +35,6 @@ export class AppComponent {
         this._ERROR_HANDLING[source][code]();
     }
 
-    private removeDuplicateSsnWarning(): void {
-        this.is_ssn_duplicate = false;
-    }
-
     // public methods
     public registerStudent(): void {
         let code = this._studentService.tryRegisterStudent(this.student);
@@ -47,7 +43,7 @@ export class AppComponent {
         else this._handleError("TRS", code);
     }
 
-    public onMouseMove(): void {
-        this.removeDuplicateSsnWarning();
+    public removeDuplicateSsnWarning(): void {
+        this.is_ssn_duplicate = false;
     }
 }

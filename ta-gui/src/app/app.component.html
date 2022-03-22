@@ -21,7 +21,7 @@
 
   <tr>
     <td><label>SSN </label></td>
-    <td (mousemove)="onMouseMove()"><input [(ngModel)]="student.ssn"></td>
+    <td><input (change)="removeDuplicateSsnWarning()" [(ngModel)]="student.ssn"></td>
     <td *ngIf="is_ssn_duplicate">
         A student with this SSN already exists.
     </td>
