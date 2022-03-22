@@ -1,8 +1,16 @@
 import { Injectable } from '@angular/core';
 import { Student } from './student';
+import { DeepClone } from './utils';
 
 @Injectable()
 export class StudentService {
+    // private properties
+    private _students: Student[] = [];
+
+    // public properties
+    get students(): Student[] {
+        return DeepClone(this._students);
+    }
     public static readonly CODE = {
         TRS: {
             OK: 0,
@@ -13,14 +21,14 @@ export class StudentService {
             STUDENT_NOT_FOUND: 1,
         }
     }
-    public students: Student[] = [];
+
 
     private _ssnIsDuplicate(ssn: string) {
-        return this.students.find((s: Student) => s.ssn == ssn) != undefined;
+        return this._students.find((s: Student) => s.ssn == ssn) != undefined;
     }
 
     private getStudentIndex(s: Student): number {
-        return this.students.findIndex((t: Student) => t.ssn == s.ssn)
+        return this._students.findIndex((t: Student) => t.ssn == s.ssn)
     }
 
     public tryRegisterStudent(s: Student): number {
@@ -29,17 +37,17 @@ export class StudentService {
         if(this._ssnIsDuplicate(s.ssn))
             return StudentService.CODE.TRS.DUPLICATE_SSN;
 
-        this.students.push(s);
+        this._students.push(s);
         return StudentService.CODE.TRS.OK;
     }
 
     public tryUpdateStudent(updatedStudent: Student): number {
         updatedStudent = updatedStudent.clone();
-        
+
         let studentIndex = this.getStudentIndex(updatedStudent);
         if(studentIndex == -1) return StudentService.CODE.TUS.STUDENT_NOT_FOUND;
 
-        this.students[studentIndex] = updatedStudent;
+        this._students[studentIndex] = updatedStudent;
         return StudentService.CODE.TUS.OK;
     }
 }
