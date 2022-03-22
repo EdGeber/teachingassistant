@@ -19,6 +19,7 @@ export class AppComponent {
         TRS: {  // see StudentService.CODE.TRS
             1: () => {  // duplicate SSN
                 this.student.ssn = "";
+                alert("A student with this SSN already exists.");
             },
         },
     }
