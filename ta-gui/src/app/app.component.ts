@@ -18,8 +18,7 @@ export class AppComponent {
     private readonly _ERROR_HANDLING: Record<ErrorSource, ErrorHandlers> = {
         TRS: {  // see StudentService.CODE.TRS
             1: () => {  // duplicate SSN
-                this.student.ssn = "";
-                alert("A student with this SSN already exists.");
+                this.is_ssn_duplicate = true;
             },
         },
     }
@@ -27,14 +26,17 @@ export class AppComponent {
 
     // public properties
     public student = new Student();
-    get students(): Student[] {
-        return this._studentService.students;
-    }
+    get students(): Student[] { return this._studentService.students; }
+    public is_ssn_duplicate = false;
 
 
     // private methods
     private _handleError(source: string, code: number) {
         this._ERROR_HANDLING[source][code]();
+    }
+
+    private removeDuplicateSsnWarning(): void {
+        this.is_ssn_duplicate = false;
     }
 
     // public methods
@@ -43,5 +45,9 @@ export class AppComponent {
         if(code == StudentService.CODE.TRS.OK)
             this.student = new Student();
         else this._handleError("TRS", code);
+    }
+
+    public onMouseMove(): void {
+        this.removeDuplicateSsnWarning();
     }
 }

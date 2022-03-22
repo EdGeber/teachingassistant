@@ -1,3 +1,5 @@
+<html>
+
 <h1>
   Teaching assistant
 </h1>
@@ -19,7 +21,10 @@
 
   <tr>
     <td><label>SSN </label></td>
-    <td><input [(ngModel)]="student.ssn"></td>
+    <td (mousemove)="onMouseMove()"><input [(ngModel)]="student.ssn"></td>
+    <td *ngIf="is_ssn_duplicate">
+        A student with this SSN already exists.
+    </td>
   </tr>
 
   <tr>
@@ -42,3 +47,5 @@
 </ul>
 
 <router-outlet></router-outlet>
+
+</html>
