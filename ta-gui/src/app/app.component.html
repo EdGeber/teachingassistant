@@ -37,14 +37,25 @@
   </tr>
 </table>
 
-<ul class="students">
-    <li *ngFor="let a of students">
-        <span>{{a.name}}</span>,
-        <span>{{a.gitName}}</span>,
-        <span>{{a.ssn}}</span>,
-        <span>{{a.email}}</span>
-    </li>
-</ul>
+<table class="students" *ngIf="students.length > 0">
+    <tr>
+        <th>Name</th>
+        <th>GitHub username</th>
+        <th>SSN</th>
+        <th>email</th>
+        <th>Requirements</th>
+        <th>Tests</th>
+    </tr>
+
+    <tr *ngFor="let s of students">
+        <td>{{s.name}}</td>
+        <td>{{s.gitName}}</td>
+        <td>{{s.ssn}}</td>
+        <td>{{s.email}}</td>
+        <td><input [(ngModel)]="s.goals['Requirements']" (change)="updateStudent(s)"></td>
+        <td><input [(ngModel)]="s.goals['Tests']" (change)="updateStudent(s)"></td>
+    </tr>
+</table>
 
 <router-outlet></router-outlet>
 

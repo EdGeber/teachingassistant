@@ -21,6 +21,11 @@ export class AppComponent {
                 this.is_ssn_duplicate = true;
             },
         },
+        TUS: {
+            1: () => {  // student not found
+                alert("Error: student not found.")
+            }
+        }
     }
     constructor(private _studentService: StudentService) {}
 
@@ -41,6 +46,13 @@ export class AppComponent {
         if(code == StudentService.CODE.TRS.OK)
             this.student = new Student();
         else this._handleError("TRS", code);
+    }
+
+    public updateStudent(s: Student): void {
+        let code = this._studentService.tryUpdateStudent(s);
+        // nothing else needs to be done if the update was successful
+        if(code != StudentService.CODE.TUS.OK)
+            this._handleError("TUS", code);
     }
 
     public removeDuplicateSsnWarning(): void {
