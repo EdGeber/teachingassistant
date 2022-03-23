@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Student } from './student';
-import { DeepClone } from './utils';
 
 @Injectable()
 export class StudentService {
@@ -9,7 +8,7 @@ export class StudentService {
 
     // public properties
     get students(): Student[] {
-        return DeepClone(this._students);
+        return this._students.map((s) => s.clone());
     }
     public static readonly CODE = {
         TRS: {

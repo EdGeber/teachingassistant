@@ -1,6 +1,6 @@
-import { DeepClone } from "./utils";
+import { DeepCloneProperties } from "./utils";
 
-export class Student {
+export class Student implements Record<string, any> {
     // public properties
     name    = "";
     gitName = "";
@@ -12,6 +12,11 @@ export class Student {
     };
 
     // public methods
-    clone(): Student { return DeepClone(this); }
+    clone(): Student {
+        let cloned = new Student();
+        let studentData = DeepCloneProperties(this);
+        for(let key in studentData) (cloned as any)[key] = studentData[key];
+        return cloned;
+    }
 
 }
