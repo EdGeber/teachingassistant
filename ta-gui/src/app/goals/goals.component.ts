@@ -7,7 +7,7 @@ import { ErrorSource, ErrorHandlers } from '../global-code/utils';
 @Component({
   selector: 'app-root',
   templateUrl: './goals.component.html',
-  styleUrls: ['../../styles.css', './goals.component.css']
+  styleUrls: ['./goals.component.css']
 })
 
 export class GoalsComponent implements OnInit {

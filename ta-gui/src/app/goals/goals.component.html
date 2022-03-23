@@ -1,6 +1,6 @@
 <div *ngIf="students.length == 0">There are no registered students yet.</div>
 
-<table class="students" *ngIf="students.length > 0">
+<table *ngIf="students.length > 0">
     <tr>
        <th>Name</th>
        <th>SSN</th>
@@ -12,7 +12,7 @@
        <td>{{s.name}}</td>
        <td>{{s.ssn}}</td>
        <td>{{s.email}}</td>
-       <td class="meta"><input [(ngModel)]="s.goals['Requirements']" (change)="updateStudent(s)"></td>
-       <td class="meta"><input [(ngModel)]="s.goals['Tests']" (change)="updateStudent(s)"></td>
+       <td class="goal"><input [(ngModel)]="s.goals['Requirements']" (change)="updateStudent(s)"></td>
+       <td class="goal"><input [(ngModel)]="s.goals['Tests']" (change)="updateStudent(s)"></td>
     </tr>
 </table>
