@@ -36,6 +36,8 @@ yarn-error.log
 /libpeerconnection.log
 testem.log
 /typings
+# just to get rid of warnings
+src/app/tsconfig.json
 
 # System files
 .DS_Store
