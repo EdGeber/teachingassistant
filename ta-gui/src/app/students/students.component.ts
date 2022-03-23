@@ -1,37 +1,30 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NgModule } from '@angular/core';
 
-import { ErrorSource, ErrorHandlers } from './utils';
-import { Student } from './student';
-import { StudentService} from './student.service';
+import { ErrorSource, ErrorHandlers } from '../global-code/utils';
+import { Student } from '../global-code/student';
+import { StudentService} from '../global-code/student.service';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  templateUrl: './students.component.html',
+  styleUrls: ['../../styles.css', './students.component.css']
 })
 
-export class AppComponent {
-    title = "ta-gui";
-    
+export class StudentsComponent implements OnInit {    
     // private properties
     private readonly _ERROR_HANDLING: Record<ErrorSource, ErrorHandlers> = {
         TRS: {  // see StudentService.CODE.TRS
             1: () => {  // duplicate SSN
                 this.is_ssn_duplicate = true;
             },
-        },
-        TUS: {
-            1: () => {  // student not found
-                alert("Error: student not found.")
-            }
         }
     }
     constructor(private _studentService: StudentService) {}
 
     // public properties
     public student = new Student();
-    get students(): Student[] { return this._studentService.students; }
+    public students!: Student[];
     public is_ssn_duplicate = false;
 
 
@@ -41,18 +34,17 @@ export class AppComponent {
     }
 
     // public methods
-    public registerStudent(): void {
-        let code = this._studentService.tryRegisterStudent(this.student);
-        if(code == StudentService.CODE.TRS.OK)
-            this.student = new Student();
-        else this._handleError("TRS", code);
+    public ngOnInit(): void {
+        this.students = this._studentService.students;
     }
 
-    public updateStudent(s: Student): void {
-        let code = this._studentService.tryUpdateStudent(s);
-        // nothing else needs to be done if the update was successful
-        if(code != StudentService.CODE.TUS.OK)
-            this._handleError("TUS", code);
+    public registerStudent(): void {
+        let code = this._studentService.tryRegisterStudent(this.student);
+        if(code == StudentService.CODE.TRS.OK) {
+            this.students.push(this.student);
+            this.student = new Student();
+        }
+        else this._handleError("TRS", code);
     }
 
     public removeDuplicateSsnWarning(): void {
