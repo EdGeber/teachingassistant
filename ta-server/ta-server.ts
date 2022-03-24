@@ -1,13 +1,12 @@
-import express = require('express');
+import express from "express";
 
-var taserver = express();
+var taServer = express();
 
-var alunos = [{nome:'Paulo',cpf:'683',email:'phmb@cin.br',metas:{'requisitos':'MA'}},{nome:'Mariana',cpf:'456',email:'@mcb@cin.br',metas:{'requisitos':'MPA'}}];
+var students = [
+    {name: 'Paulo',  ssn: '683', email: 'phmb@cin.br', goals: {'requirements': 'MA',  'tests': 'MA' }},
+    {name:'Mariana', ssn: '456', email: '@mcb@cin.br', goals: {'requirements': 'MPA', 'tests': 'MPA'}}
+];
 
-taserver.get('/', function (req, res) {
-  res.send(alunos);
-})
+taServer.get('/', (req, res) => res.send(students))
 
-taserver.listen(3000, function () {
-  console.log('Example app listening on port 3000!');
-})
+taServer.listen(3000, () => console.log('Example app listening on port 3000!'))
