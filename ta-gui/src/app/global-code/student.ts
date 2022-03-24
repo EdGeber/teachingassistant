@@ -1,6 +1,6 @@
 import { DeepCloneProperties } from "./utils";
 
-export class Student implements Record<string, any> {
+export class Student{
     // public properties
     name    = "";
     gitName = "";
