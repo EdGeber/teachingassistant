@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgModule } from '@angular/core';
-import { Student } from '../global-code/student';
+import { Student } from '../../../../common/student';
 import { StudentService } from '../global-code/student.service';
 import { ErrorSource, ErrorHandlers } from '../global-code/utils';
 

@@ -1,4 +1,4 @@
-import { DeepCloneProperties } from "./utils";
+import { DeepCloneProperties } from "../ta-gui/src/app/global-code/utils";
 
 export class Student{
     // public properties
@@ -15,7 +15,7 @@ export class Student{
     static fromJSON(studentJSON: string): Student {
         let from: any = JSON.parse(studentJSON);
         let s = new Student();
-        for(let key in from) s[key] = from[key];
+        for(let key in from) (s as any)[key] = from[key];
         return s;
     }
 

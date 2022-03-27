@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgModule } from '@angular/core';
 
 import { ErrorSource, ErrorHandlers } from '../global-code/utils';
-import { Student } from '../global-code/student';
+import { Student } from '../../../../common/student';
 import { StudentService} from '../global-code/student.service';
 
 @Component({
