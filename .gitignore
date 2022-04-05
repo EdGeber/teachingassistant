@@ -64,3 +64,5 @@ typeScript/
 
 # dotenv environment variables file
 .env
+
+ta-server/response.html

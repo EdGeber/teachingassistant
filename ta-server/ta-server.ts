@@ -1,12 +1,22 @@
 import express from "express";
+import { Student } from "../common/student";
+import { StudentRegistration } from "./StudentRegistration";
 
 var taServer = express();
 
-var students = [
-    {name: 'Paulo',  ssn: '683', email: 'phmb@cin.br', goals: {'requirements': 'MA',  'tests': 'MA' }},
-    {name:'Mariana', ssn: '456', email: '@mcb@cin.br', goals: {'requirements': 'MPA', 'tests': 'MPA'}}
-];
+const studentRegistration = new StudentRegistration;
 
-taServer.get('/', (req, res) => res.send(students))
+taServer.use(express.json());
+
+
+taServer.get('/', (req, res) => res.send(JSON.stringify(studentRegistration.students)))
+
+taServer.post('/students', (req, res) => {
+    res.send({"code": studentRegistration.tryRegisterStudent(Student.fromAny(req.body))});
+})
+
+taServer.put('/students', (req, res) => {
+    res.send({"code": studentRegistration.tryUpdateStudent(Student.fromAny(req.body))});
+})
 
 taServer.listen(3000, () => console.log('Example app listening on port 3000!'))

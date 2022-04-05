@@ -12,8 +12,7 @@ export class Student{
     };
 
     // wtf man constructor overloading is not allowed...
-    static fromJSON(studentJSON: string): Student {
-        let from: any = JSON.parse(studentJSON);
+    static fromAny(from: any): Student {
         let s = new Student();
         for(let key in from) (s as any)[key] = from[key];
         return s;
