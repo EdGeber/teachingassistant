@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
 
 import { HeadComponent } from './head/head.component';
 import { GoalsComponent } from './goals/goals.component';
@@ -17,6 +18,7 @@ import { StudentService } from './global-code/student.service';
   imports: [
     BrowserModule,
     FormsModule,
+    HttpClientModule,
     RouterModule.forRoot([
         {
             path: 'goals',

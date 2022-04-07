@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { NgModule } from '@angular/core';
 
+import { lastValueFrom, Observable } from 'rxjs';
+
 import { ErrorSource, ErrorHandlers } from '../global-code/utils';
 import { Student } from '../../../../common/student';
 import { StudentService} from '../global-code/student.service';
@@ -20,7 +22,6 @@ export class StudentsComponent implements OnInit {
             },
         }
     }
-    constructor(private _studentService: StudentService) {}
 
     // public properties
     public student = new Student();
@@ -34,17 +35,21 @@ export class StudentsComponent implements OnInit {
     }
 
     // public methods
-    public ngOnInit(): void {
-        this.students = this._studentService.students;
+    constructor(private _studentService: StudentService) {}
+
+    public async ngOnInit() {
+        this.students = await lastValueFrom(this._studentService.students);
     }
 
-    public registerStudent(): void {
-        let code = this._studentService.tryRegisterStudent(this.student);
-        if(code == StudentService.CODE.TRS.OK) {
+    public async registerStudent() {
+        var res: {code: number} = await
+            lastValueFrom(this._studentService.tryRegisterStudent(this.student))
+
+        if(res.code == StudentService.CODE.TRS.OK) {
             this.students.push(this.student);
             this.student = new Student();
         }
-        else this._handleError("TRS", code);
+        else this._handleError("TRS", res.code);
     }
 
     public removeDuplicateSsnWarning(): void {

@@ -6,10 +6,18 @@ var taServer = express();
 
 const studentRegistration = new StudentRegistration;
 
+var allowCrossDomain = function(req: any, res: any, next: any) {
+    res.header('Access-Control-Allow-Origin', "*");
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    next();
+}
+taServer.use(allowCrossDomain);
+
 taServer.use(express.json());
 
 
-taServer.get('/', (req, res) => res.send(JSON.stringify(studentRegistration.students)))
+taServer.get('/students', (req, res) => res.send(JSON.stringify(studentRegistration.students)))
 
 taServer.post('/students', (req, res) => {
     res.send({"code": studentRegistration.tryRegisterStudent(Student.fromAny(req.body))});

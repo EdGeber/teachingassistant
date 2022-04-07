@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgModule } from '@angular/core';
+import { lastValueFrom } from 'rxjs';
 import { Student } from '../../../../common/student';
 import { StudentService } from '../global-code/student.service';
 import { ErrorSource, ErrorHandlers } from '../global-code/utils';
@@ -19,6 +20,7 @@ export class GoalsComponent implements OnInit {
             }
         }
     }
+
     constructor(private _studentService: StudentService) {}
 
     // public properties
@@ -30,14 +32,15 @@ export class GoalsComponent implements OnInit {
     }
 
     // public methods
-    public ngOnInit(): void {
-        this.students = this._studentService.students;
+    public async ngOnInit() {
+        this.students = await lastValueFrom(this._studentService.students);
     }
 
-    public updateStudent(s: Student): void {
-        let code = this._studentService.tryUpdateStudent(s);
-        // nothing else needs to be done if the update was successful
-        if(code != StudentService.CODE.TUS.OK)
-            this._handleError("TUS", code);
+    public async updateStudent(s: Student) {
+        var res: {code: number} = await
+            lastValueFrom(this._studentService.tryUpdateStudent(s));
+
+        if(res.code != StudentService.CODE.TUS.OK)
+            this._handleError("TUS", res.code);
     }
 }

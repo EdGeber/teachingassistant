@@ -1,15 +1,20 @@
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { retry, map} from 'rxjs/operators';
 import { Student } from '../../../../common/student';
 
 @Injectable()
 export class StudentService {
-    // private properties
-    private _students: Student[] = [];
+    // static private properties
+    private static readonly headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
-    // public properties
-    get students(): Student[] {
-        return this._students.map((s) => s.clone());
+    private static readonly taURLs = {
+        root: 'http://localhost:3000/',
+        students: 'http://localhost:3000/students',
     }
+
+    // static public properties
     public static readonly CODE = {
         TRS: {
             OK: 0,
@@ -21,32 +26,38 @@ export class StudentService {
         }
     }
 
+    // non-static private methods
 
-    private _ssnIsDuplicate(ssn: string) {
-        return this._students.find((s: Student) => s.ssn == ssn) != undefined;
+    // non-static public methods
+    constructor(private http: HttpClient) { }
+
+
+    // non-static private properties
+ // private http: HttpClient; (declared in the constructor)
+
+    // non-static public properties
+    get students(): Observable<Student[]> {
+        return this.http
+            .get<any[]>(StudentService.taURLs.students)
+            .pipe(retry(2), map(anyArray => anyArray.map((s) => Student.fromAny(s))));
     }
 
-    private getStudentIndex(s: Student): number {
-        return this._students.findIndex((t: Student) => t.ssn == s.ssn)
+    // non-static private methods
+
+    // non-static public methods
+    public tryRegisterStudent(newStudent: Student): Observable<{"code": number}> {
+        return this.http.post<{"code": number}>(
+            StudentService.taURLs.students,
+            newStudent,
+            {headers: StudentService.headers})
+            .pipe(retry(2));
     }
 
-    public tryRegisterStudent(s: Student): number {
-        s = s.clone();
-
-        if(this._ssnIsDuplicate(s.ssn))
-            return StudentService.CODE.TRS.DUPLICATE_SSN;
-
-        this._students.push(s);
-        return StudentService.CODE.TRS.OK;
-    }
-
-    public tryUpdateStudent(updatedStudent: Student): number {
-        updatedStudent = updatedStudent.clone();
-
-        let studentIndex = this.getStudentIndex(updatedStudent);
-        if(studentIndex == -1) return StudentService.CODE.TUS.STUDENT_NOT_FOUND;
-
-        this._students[studentIndex] = updatedStudent;
-        return StudentService.CODE.TUS.OK;
+    public tryUpdateStudent(updatedStudent: Student): Observable<{"code": number}> {
+        return this.http.put<{"code": number}>(
+            StudentService.taURLs.students,
+            updatedStudent,
+            {headers: StudentService.headers})
+            .pipe(retry(2));
     }
 }

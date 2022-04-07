@@ -35,7 +35,8 @@ export class StudentRegistration {
         return StudentRegistration.CODE.TRS.OK;
     }
 
-    public tryUpdateStudent(updatedStudent: Student): number {
+    public tryUpdateStudent(updatedStudent: Student): number {     
+        var hi = this.students;   
         updatedStudent = updatedStudent.clone();
 
         let studentIndex = this.getStudentIndex(updatedStudent);
