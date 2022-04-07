@@ -1,19 +1,13 @@
 import { Student } from "../common/student";
+import { Ack, ACK } from "../common/ack";
 
 export class StudentRegistration {
-    // private properties
-    public students: Student[] = [];
+    public readonly students: Student[] = [];
 
-    // public properties
-    public static readonly CODE = {
-        TRS: {
-            OK: 0,
-            DUPLICATE_SSN: 1,
-        },
-        TUS: {
-            OK: 0,
-            STUDENT_NOT_FOUND: 1,
-        }
+    get ackedStudents(): Ack<Student[]> {
+        let ack: Ack<Student[]> = ACK.getStudents.OK;
+        ack.body = this.students;
+        return ack;
     }
 
 
@@ -21,28 +15,31 @@ export class StudentRegistration {
         return this.students.find((s: Student) => s.ssn == ssn) != undefined;
     }
 
-    private getStudentIndex(s: Student): number {
+    private _getStudentIndex(s: Student): number {
         return this.students.findIndex((t: Student) => t.ssn == s.ssn)
     }
 
-    public tryRegisterStudent(s: Student): number {
+    public tryRegisterStudent(s: Student): Ack {
+        const src = "TRS";
+
         s = s.clone();
 
         if(this._ssnIsDuplicate(s.ssn))
-            return StudentRegistration.CODE.TRS.DUPLICATE_SSN;
+            return ACK.TRS.DUPLICATE_SSN;
 
         this.students.push(s);
-        return StudentRegistration.CODE.TRS.OK;
+        return ACK.TRS.OK;
     }
 
-    public tryUpdateStudent(updatedStudent: Student): number {     
-        var hi = this.students;   
+    public tryUpdateStudent(updatedStudent: Student): Ack {     
+
         updatedStudent = updatedStudent.clone();
 
-        let studentIndex = this.getStudentIndex(updatedStudent);
-        if(studentIndex == -1) return StudentRegistration.CODE.TUS.STUDENT_NOT_FOUND;
+        let studentIndex = this._getStudentIndex(updatedStudent);
+        if(studentIndex == -1)
+            return ACK.TUS.STUDENT_NOT_FOUND;
 
         this.students[studentIndex] = updatedStudent;
-        return StudentRegistration.CODE.TUS.OK;
+        return ACK.TUS.OK;
     }
 }

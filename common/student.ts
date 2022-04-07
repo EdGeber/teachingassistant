@@ -1,6 +1,6 @@
 import { DeepCloneProperties } from "../ta-gui/src/app/global-code/utils";
 
-export class Student{
+export class Student {
     // public properties
     name    = "";
     gitName = "";

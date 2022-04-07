@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { retry, map} from 'rxjs/operators';
 import { Student } from '../../../../common/student';
+import { Ack } from '../../../../common/ack';
 
 @Injectable()
 export class StudentService {
@@ -14,20 +15,6 @@ export class StudentService {
         students: 'http://localhost:3000/students',
     }
 
-    // static public properties
-    public static readonly CODE = {
-        TRS: {
-            OK: 0,
-            DUPLICATE_SSN: 1,
-        },
-        TUS: {
-            OK: 0,
-            STUDENT_NOT_FOUND: 1,
-        }
-    }
-
-    // non-static private methods
-
     // non-static public methods
     constructor(private http: HttpClient) { }
 
@@ -36,28 +23,27 @@ export class StudentService {
  // private http: HttpClient; (declared in the constructor)
 
     // non-static public properties
-    get students(): Observable<Student[]> {
+    get students(): Observable<Ack<Student[]>> {
         return this.http
-            .get<any[]>(StudentService.taURLs.students)
-            .pipe(retry(2), map(anyArray => anyArray.map((s) => Student.fromAny(s))));
-    }
-
-    // non-static private methods
-
-    // non-static public methods
-    public tryRegisterStudent(newStudent: Student): Observable<{"code": number}> {
-        return this.http.post<{"code": number}>(
-            StudentService.taURLs.students,
-            newStudent,
-            {headers: StudentService.headers})
+            .get<Ack<Student[]>>(StudentService.taURLs.students)
             .pipe(retry(2));
     }
 
-    public tryUpdateStudent(updatedStudent: Student): Observable<{"code": number}> {
-        return this.http.put<{"code": number}>(
-            StudentService.taURLs.students,
-            updatedStudent,
-            {headers: StudentService.headers})
+    // non-static public methods
+    public tryRegisterStudent(newStudent: Student): Observable<Ack> {
+        return this.http
+            .post<Ack>(
+                StudentService.taURLs.students,
+                newStudent,
+                {headers: StudentService.headers})
+            .pipe(retry(2));
+    }
+
+    public tryUpdateStudent(updatedStudent: Student): Observable<Ack> {
+        return this.http
+            .put<Ack>(StudentService.taURLs.students,
+                updatedStudent,
+                {headers: StudentService.headers})
             .pipe(retry(2));
     }
 }

@@ -1,4 +1,5 @@
 import express from "express";
+import { Ack, ACK } from "../common/ack";
 import { Student } from "../common/student";
 import { StudentRegistration } from "./StudentRegistration";
 
@@ -17,14 +18,19 @@ taServer.use(allowCrossDomain);
 taServer.use(express.json());
 
 
-taServer.get('/students', (req, res) => res.send(JSON.stringify(studentRegistration.students)))
+taServer.get('/students', (req, res) => {
+    let ack = studentRegistration.ackedStudents;
+    res.send(ack);
+})
 
 taServer.post('/students', (req, res) => {
-    res.send({"code": studentRegistration.tryRegisterStudent(Student.fromAny(req.body))});
+    let ack = studentRegistration.tryRegisterStudent(Student.fromAny(req.body))
+    res.send(ack);
 })
 
 taServer.put('/students', (req, res) => {
-    res.send({"code": studentRegistration.tryUpdateStudent(Student.fromAny(req.body))});
+    let ack = studentRegistration.tryUpdateStudent(Student.fromAny(req.body));
+    res.send(ack);
 })
 
 taServer.listen(3000, () => console.log('Example app listening on port 3000!'))

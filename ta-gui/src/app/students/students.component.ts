@@ -3,9 +3,9 @@ import { NgModule } from '@angular/core';
 
 import { lastValueFrom, Observable } from 'rxjs';
 
-import { ErrorSource, ErrorHandlers } from '../global-code/utils';
 import { Student } from '../../../../common/student';
 import { StudentService} from '../global-code/student.service';
+import { ErrorHandlers, Ack, ACK } from '../../../../common/ack';
 
 @Component({
   selector: 'app-root',
@@ -15,12 +15,13 @@ import { StudentService} from '../global-code/student.service';
 
 export class StudentsComponent implements OnInit {    
     // private properties
-    private readonly _ERROR_HANDLING: Record<ErrorSource, ErrorHandlers> = {
-        TRS: {  // see StudentService.CODE.TRS
-            1: () => {  // duplicate SSN
-                this.is_ssn_duplicate = true;
-            },
-        }
+    private readonly _ERROR_HANDLING: ErrorHandlers = {};
+
+    constructor(private _studentService: StudentService) {
+
+        this._ERROR_HANDLING[ACK.TRS.DUPLICATE_SSN.code] =
+            () => this.is_ssn_duplicate = true;
+
     }
 
     // public properties
@@ -30,29 +31,33 @@ export class StudentsComponent implements OnInit {
 
 
     // private methods
-    private _handleError(source: string, code: number) {
-        this._ERROR_HANDLING[source][code]();
+    private _handleError(ack: Ack) {
+        this._ERROR_HANDLING[ack.code]();
     }
+
+    /*
+    private getStudentsFromAck(ackedStudents: Ack<Students[]>): Students[] {
+
+    }*/
 
     // public methods
-    constructor(private _studentService: StudentService) {}
-
     public async ngOnInit() {
-        this.students = await lastValueFrom(this._studentService.students);
-    }
-
-    public async registerStudent() {
-        var res: {code: number} = await
-            lastValueFrom(this._studentService.tryRegisterStudent(this.student))
-
-        if(res.code == StudentService.CODE.TRS.OK) {
-            this.students.push(this.student);
-            this.student = new Student();
-        }
-        else this._handleError("TRS", res.code);
+        let ack = await lastValueFrom(this._studentService.students)
+        this.students = ack.body as Student[];
     }
 
     public removeDuplicateSsnWarning(): void {
         this.is_ssn_duplicate = false;
+    }
+
+    public async registerStudent() {
+        var ack = await
+            lastValueFrom(this._studentService.tryRegisterStudent(this.student));
+
+        if(ack.code == ACK.OK) {
+            this.students.push(this.student);
+            this.student = new Student();
+        }
+        else this._handleError(ack);
     }
 }

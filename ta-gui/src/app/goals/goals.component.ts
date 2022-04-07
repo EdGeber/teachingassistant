@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { NgModule } from '@angular/core';
 import { lastValueFrom } from 'rxjs';
+import { Ack, ACK, ErrorHandlers } from '../../../../common/ack';
 import { Student } from '../../../../common/student';
 import { StudentService } from '../global-code/student.service';
-import { ErrorSource, ErrorHandlers } from '../global-code/utils';
 
 @Component({
   selector: 'app-root',
@@ -13,34 +13,34 @@ import { ErrorSource, ErrorHandlers } from '../global-code/utils';
 
 export class GoalsComponent implements OnInit {
     // private properties
-    private readonly _ERROR_HANDLING: Record<ErrorSource, ErrorHandlers> = {
-        TUS: {
-            1: () => {  // student not found
-                alert("Error: student not found.")
-            }
-        }
-    }
+    private readonly _ERROR_HANDLING: ErrorHandlers = {};
 
-    constructor(private _studentService: StudentService) {}
+    constructor(private _studentService: StudentService) {
+
+        this._ERROR_HANDLING[ACK.TUS.STUDENT_NOT_FOUND.code] =
+            () => alert("Error: student not found.");
+
+    }
 
     // public properties
     public students!: Student[];
 
     // private methods
-    private _handleError(source: string, code: number) {
-        this._ERROR_HANDLING[source][code]();
+    private _handleError(ack: Ack) {
+        this._ERROR_HANDLING[ack.code]();
     }
 
     // public methods
     public async ngOnInit() {
-        this.students = await lastValueFrom(this._studentService.students);
+        let ack = await lastValueFrom(this._studentService.students)
+        this.students = ack.body as Student[];
     }
 
     public async updateStudent(s: Student) {
-        var res: {code: number} = await
+        var ack = await
             lastValueFrom(this._studentService.tryUpdateStudent(s));
 
-        if(res.code != StudentService.CODE.TUS.OK)
-            this._handleError("TUS", res.code);
+        if(ack.code != ACK.OK)
+            this._handleError(ack);
     }
 }
