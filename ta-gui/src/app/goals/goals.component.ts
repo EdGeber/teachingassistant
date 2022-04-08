@@ -6,7 +6,7 @@ import { Student } from '../../../../common/student';
 import { StudentService } from '../global-code/student.service';
 
 @Component({
-  selector: 'app-root',
+  selector: 'goals',
   templateUrl: './goals.component.html',
   styleUrls: ['./goals.component.css']
 })

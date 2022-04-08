@@ -8,7 +8,7 @@ import { StudentService} from '../global-code/student.service';
 import { ErrorHandlers, Ack, ACK } from '../../../../common/ack';
 
 @Component({
-  selector: 'app-root',
+  selector: 'students',
   templateUrl: './students.component.html',
   styleUrls: ['../../styles.css', './students.component.css']
 })
